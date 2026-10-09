@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages {
         stage('1. Pull Code') {
             steps {
@@ -12,8 +16,8 @@ pipeline {
         stage('2. Run Tests') {
             steps {
                 echo 'Initializing automated testing environment...'
-                // Installs the testing tool and validates the python script
-                sh 'pip3 install --break-system-packages pytest && pytest test_app.py'
+                // Build the test target so Python and pip come from the image.
+                sh 'docker build --target test .'
             }
         }
 
